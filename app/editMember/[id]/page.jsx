@@ -1,32 +1,37 @@
 import EditMemberForm from "@/components/EditMemberForm";
 
-
 const getMemberById = async (id) => {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/members/${id}`, {
       cache: "no-store"
     });
 
-    if (!res.ok){
-      throw new Error("Failed to fetch topic")
+    if (!res.ok) {
+      throw new Error("Failed to fetch member");
     }
-    return res.json();
+    const data = await res.json();
+    return data.member; // Ensure we return the member object
   } catch (error) {
-    console.log(error)
+    console.log(error);
+    return null;
   }
 };
 
-const editMember = async({params}) => {
-  const {id} = params;
-  const {topic} = await getMemberById(id);
-  const {member, description} = topic;
+const EditMemberPage = async ({ params }) => {
+  const { id } = params;
+  const memberData = await getMemberById(id);
 
+  if (!memberData) {
+    return <div>Error fetching member data</div>;
+  }
+
+  const { member, description } = memberData;
 
   return (
     <div>
-        <EditMemberForm id = {id} member = {member} description = {description} />
+      <EditMemberForm id={id} member={member} description={description} />
     </div>
-  )
-}
+  );
+};
 
-export default editMember
+export default EditMemberPage;
