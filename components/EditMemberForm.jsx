@@ -3,11 +3,10 @@ import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 
 const EditMemberForm = ({ id, member, description }) => {
+  const router = useRouter();
   const [newMember, setNewMember] = useState(member);
   const [newDescription, setNewDescription] = useState(description);
-  const router = useRouter();
-
-
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();

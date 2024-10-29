@@ -1,3 +1,4 @@
+"use client"
 import EditMemberForm from "@/components/EditMemberForm";
 
 const getMemberById = async (id) => {
