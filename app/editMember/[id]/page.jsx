@@ -21,9 +21,9 @@ const EditMemberPage = async ({ params }) => {
   const { id } = params;
   const memberData = await getMemberById(id);
 
-  // if (!memberData) {
-  //   return <div>Error fetching member data</div>;
-  // }
+  if (!memberData) {
+    return <div>Error fetching member data</div>;
+  }
 
   const { member, description } = memberData;
 
