@@ -1,9 +1,10 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from 'react';
 import Removebtn from './Removebtn';
 import Link from 'next/link';
 import { HiPencilAlt } from "react-icons/hi";
 import moment from 'moment-timezone';
+import QRCode from 'qrcode';
 
 const getMembers = async () => {
   try {
@@ -37,10 +38,9 @@ const Memberslist = () => {
   const removeMemberFromList = (id) => {
     setMembers((prevMembers) => prevMembers.filter(member => member._id !== id));
   };
-  // TODO: Add picture to the member list.
+
   return (
     <>
-    
       {members.map((m) => (
         <div key={m._id} className='p-4 border border-slate-300 my-3 flex justify-between rounded gap-5 items-start'>
           <div>
@@ -48,6 +48,9 @@ const Memberslist = () => {
             <div>{m.description}</div>
             <div className='text-green-600'>
               Date registered: {moment.tz(m.createdAt, 'Asia/Manila').format('MMMM D, YYYY')}
+            </div>
+            <div>
+              <QRCodeImage qrID={m.qrID} member={m.member} />
             </div>
           </div>
           <div className='flex gap-2'>
@@ -62,6 +65,29 @@ const Memberslist = () => {
   );
 };
 
+const QRCodeImage = ({ qrID, member }) => {
+  const [qrCodeUrl, setQrCodeUrl] = useState('');
+
+  useEffect(() => {
+    const generateAndSetQRCode = async () => {
+      try {
+        const url = await QRCode.toDataURL(qrID, { width: 128 });
+        setQrCodeUrl(url);
+      } catch (error) {
+        console.error('Failed to generate QR code', error);
+      }
+    };
+
+    generateAndSetQRCode();
+  }, [qrID]);
+
+  return (
+    qrCodeUrl && (
+      <a href={qrCodeUrl} download={`${member}.png`}>
+        Download QR
+      </a>
+    )
+  );
+};
+
 export default Memberslist;
-
-
