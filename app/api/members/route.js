@@ -4,9 +4,9 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
     try {
-        const { member, description } = await request.json();
+        const { member, description, qrID } = await request.json();
         await connectMongoDB();
-        await Member.create({ member, description });
+        await Member.create({ member, description, qrID });
         return NextResponse.json({ message: "Member Created" }, { status: 201 });
     } catch (error) {
         console.error("Error creating member:", error);
